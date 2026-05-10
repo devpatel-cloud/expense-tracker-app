@@ -3,13 +3,17 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
 from .database import engine, Base
-from . import models
 from .routers import users
 from .routers import expenses
 
-app = FastAPI()
+# Create FastAPI App
+app = FastAPI(
+    title="Expense Tracker API",
+    description="FastAPI Expense Tracker with Frontend",
+    version="1.0.0"
+)
 
-# CORS Configuration
+# Enable CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -18,22 +22,30 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Create Database Tables
+Base.metadata.create_all(bind=engine)
+
 # Include Routers
 app.include_router(users.router)
 app.include_router(expenses.router)
 
-# Create Database Tables
-Base.metadata.create_all(bind=engine)
+# Serve Frontend Static Files
+app.mount(
+    "/frontend",
+    StaticFiles(directory="frontend"),
+    name="frontend"
+)
 
-# Serve Frontend Files
-app.mount("/frontend", StaticFiles(directory="/app/frontend"), name="frontend")
-
-# Home Endpoint
+# Root Endpoint
 @app.get("/")
 def home():
-    return {"message": "Expense Tracker API Running"}
+    return {
+        "message": "Expense Tracker API Running Successfully"
+    }
 
 # Health Check Endpoint
 @app.get("/health")
 def health():
-    return {"status": "healthy"}
+    return {
+        "status": "healthy"
+    }
