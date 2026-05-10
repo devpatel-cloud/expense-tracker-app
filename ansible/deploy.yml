@@ -1,15 +1,57 @@
 ---
-- hosts: azurevm
+- name: Deploy Expense Tracker Application
+  hosts: all
   become: yes
 
   tasks:
 
-    - name: Clone GitHub Repository
-      git:
-        repo: "https://github.com/devpatel-cloud/expense-tracker-app.git"
-        dest: /home/azureuser/expense-tracker-api
+    - name: Install required packages
+      apt:
+        name:
+          - git
+          - docker.io
+          - docker-compose
+        state: present
+        update_cache: yes
 
-    - name: Run Docker Compose
-      command: docker-compose up -d
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Remove old project directory
+      file:
+        path: /home/azureuser/expense-tracker-app
+        state: absent
+
+    - name: Clone latest GitHub repository
+      git:
+        repo: https://github.com/devpatel-cloud/expense-tracker-app.git
+        dest: /home/azureuser/expense-tracker-app
+        version: main
+        force: yes
+
+    - name: Stop and remove old Docker containers
+      shell: |
+        docker-compose down || true
+        docker rm -f expense-tracker-app || true
       args:
-        chdir: /home/azureuser/expense-tracker-api
+        chdir: /home/azureuser/expense-tracker-app
+
+    - name: Remove unused Docker images
+      shell: docker system prune -af
+      ignore_errors: yes
+
+    - name: Build and start Docker containers
+      command: docker-compose up --build -d
+      args:
+        chdir: /home/azureuser/expense-tracker-app
+
+    - name: Show running Docker containers
+      command: docker ps
+      register: docker_output
+
+    - name: Display Docker container status
+      debug:
+        var: docker_output.stdout_lines

@@ -1,9 +1,10 @@
-const API_URL = "http://127.0.0.1:8000";
+// Backend API URL
+const API_URL = "";
 
-function showMessage(message, type){
+// Show Message
+function showMessage(message, type) {
 
-    const box =
-        document.getElementById("messageBox");
+    const box = document.getElementById("messageBox");
 
     box.innerText = message;
 
@@ -16,31 +17,51 @@ function showMessage(message, type){
     }, 3000);
 }
 
+
+// Register User
 async function register() {
 
     const username = document.getElementById("username").value;
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
-    const response = await fetch(`${API_URL}/register`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            username,
-            email,
-            password
-        })
-    });
+    try {
 
-    const data = await response.json();
+        const response = await fetch(`${API_URL}/register`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username,
+                email,
+                password
+            })
+        });
 
-    showMessage(data.message, "success");
+        const data = await response.json();
 
-    window.location.href = "login.html";
+        if (response.ok) {
+
+            showMessage("Registration successful", "success");
+
+            setTimeout(() => {
+                window.location.href = "login.html";
+            }, 1000);
+
+        } else {
+
+            showMessage(data.detail || "Registration failed", "error");
+        }
+
+    } catch (error) {
+
+        showMessage("Server error", "error");
+    }
 }
 
+
+// Login User
 async function login() {
 
     const email = document.getElementById("email").value;
@@ -51,23 +72,41 @@ async function login() {
     formData.append("username", email);
     formData.append("password", password);
 
-    const response = await fetch(`${API_URL}/login`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: formData
-    });
+    try {
 
-    const data = await response.json();
+        const response = await fetch(`${API_URL}/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: formData
+        });
 
-    localStorage.setItem("token", data.access_token);
+        const data = await response.json();
 
-    showMessage("Login successful", "success");
+        if (response.ok) {
 
-    window.location.href = "dashboard.html";
+            localStorage.setItem("token", data.access_token);
+
+            showMessage("Login successful", "success");
+
+            setTimeout(() => {
+                window.location.href = "dashboard.html";
+            }, 1000);
+
+        } else {
+
+            showMessage(data.detail || "Login failed", "error");
+        }
+
+    } catch (error) {
+
+        showMessage("Server error", "error");
+    }
 }
 
+
+// Add Expense
 async function addExpense() {
 
     const title = document.getElementById("title").value;
@@ -76,72 +115,101 @@ async function addExpense() {
 
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${API_URL}/expenses`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify({
-            title,
-            amount,
-            category
-        })
-    });
+    try {
 
-    const data = await response.json();
+        const response = await fetch(`${API_URL}/expenses`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                title,
+                amount,
+                category
+            })
+        });
 
-    showMessage(data.message, "success");
+        const data = await response.json();
 
-    loadExpenses();
+        if (response.ok) {
+
+            showMessage("Expense added successfully", "success");
+
+            loadExpenses();
+
+        } else {
+
+            showMessage(data.detail || "Failed to add expense", "error");
+        }
+
+    } catch (error) {
+
+        showMessage("Server error", "error");
+    }
 }
 
+
+// Load Expenses
 async function loadExpenses() {
 
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${API_URL}/expenses`, {
-        headers: {
-            "Authorization": `Bearer ${token}`
-        }
-    });
+    try {
 
-    const expenses = await response.json();
+        const response = await fetch(`${API_URL}/expenses`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
 
-    const expenseList = document.getElementById("expenseList");
+        const expenses = await response.json();
 
-    const totalAmount = document.getElementById("totalAmount");
+        const expenseList = document.getElementById("expenseList");
 
-    expenseList.innerHTML = "";
+        const totalAmount = document.getElementById("totalAmount");
 
-    let total = 0;
+        expenseList.innerHTML = "";
 
-    expenses.forEach(expense => {
+        let total = 0;
 
-        total += expense.amount;
+        expenses.forEach(expense => {
 
-        const card = document.createElement("div");
+            total += expense.amount;
 
-        card.classList.add("expense-card");
+            const card = document.createElement("div");
 
-        card.innerHTML = `
-            <h4>${expense.title}</h4>
-            <p>Rs.${expense.amount}</p>
-            <p>${expense.category}</p>
-        `;
+            card.classList.add("expense-card");
 
-        expenseList.appendChild(card);
-    });
+            card.innerHTML = `
+                <h4>${expense.title}</h4>
+                <p>Rs. ${expense.amount}</p>
+                <p>${expense.category}</p>
+            `;
 
-    totalAmount.innerText = `Rs.${total}`;
+            expenseList.appendChild(card);
+        });
+
+        totalAmount.innerText = `Rs. ${total}`;
+
+    } catch (error) {
+
+        showMessage("Failed to load expenses", "error");
+    }
 }
 
-function logout(){
+
+// Logout
+function logout() {
 
     localStorage.removeItem("token");
 
     window.location.href = "login.html";
 }
-if(window.location.pathname.includes("dashboard.html")){
+
+
+// Auto Load Expenses
+if (window.location.pathname.includes("dashboard.html")) {
+
     loadExpenses();
 }
