@@ -18,15 +18,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Routers
+# Include Routers
 app.include_router(users.router)
 app.include_router(expenses.router)
 
-# Database
+# Create Database Tables
 Base.metadata.create_all(bind=engine)
 
-# Serve Frontend Static Files
-app.mount("/frontend", StaticFiles(directory="frontend"), name="frontend")
+# Serve Frontend Files
+app.mount("/frontend", StaticFiles(directory="/app/frontend"), name="frontend")
 
 # Home Endpoint
 @app.get("/")
