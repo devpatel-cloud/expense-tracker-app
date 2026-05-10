@@ -31,7 +31,7 @@ resource "azurerm_network_security_group" "nsg" {
 
   security_rule {
     name                       = "SSH"
-    priority                   = 1001
+    priority                   = 330
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
@@ -43,7 +43,7 @@ resource "azurerm_network_security_group" "nsg" {
 
   security_rule {
     name                       = "FastAPI"
-    priority                   = 1002
+    priority                   = 300
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
@@ -55,7 +55,7 @@ resource "azurerm_network_security_group" "nsg" {
 
   security_rule {
     name                       = "Grafana"
-    priority                   = 1003
+    priority                   = 310
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
@@ -67,7 +67,7 @@ resource "azurerm_network_security_group" "nsg" {
 
   security_rule {
     name                       = "Prometheus"
-    priority                   = 1004
+    priority                   = 320
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
