@@ -1,0 +1,107 @@
+---
+- name: Setup Monitoring Stack
+  hosts: all
+  become: yes
+
+  tasks:
+
+    - name: Install required packages
+      apt:
+        name:
+          - docker.io
+          - wget
+        state: present
+        update_cache: yes
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    # ----------------------------
+    # NODE EXPORTER
+    # ----------------------------
+
+    - name: Download Node Exporter
+      get_url:
+        url: https://github.com/prometheus/node_exporter/releases/download/v1.8.1/node_exporter-1.8.1.linux-amd64.tar.gz
+        dest: /tmp/node_exporter.tar.gz
+
+    - name: Extract Node Exporter
+      unarchive:
+        src: /tmp/node_exporter.tar.gz
+        dest: /tmp/
+        remote_src: yes
+
+    - name: Copy Node Exporter Binary
+      copy:
+        src: /tmp/node_exporter-1.8.1.linux-amd64/node_exporter
+        dest: /usr/local/bin/node_exporter
+        mode: '0755'
+        remote_src: yes
+
+    - name: Stop old Node Exporter
+      shell: pkill node_exporter || true
+
+    - name: Start Node Exporter
+      shell: |
+        nohup node_exporter > /dev/null 2>&1 &
+
+    # ----------------------------
+    # PROMETHEUS
+    # ----------------------------
+
+    - name: Create Prometheus directory
+      file:
+        path: /opt/prometheus
+        state: directory
+
+    - name: Create Prometheus config
+      copy:
+        dest: /opt/prometheus/prometheus.yml
+        content: |
+          global:
+            scrape_interval: 15s
+
+          scrape_configs:
+            - job_name: "node_exporter"
+              static_configs:
+                - targets: ["20.197.24.242:9100"]
+
+    - name: Remove old Prometheus container
+      shell: docker rm -f prometheus || true
+
+    - name: Run Prometheus container
+      shell: |
+        docker run -d \
+          --name prometheus \
+          -p 9090:9090 \
+          -v /opt/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml \
+          prom/prometheus
+
+    # ----------------------------
+    # GRAFANA
+    # ----------------------------
+
+    - name: Remove old Grafana container
+      shell: docker rm -f grafana || true
+
+    - name: Run Grafana container
+      shell: |
+        docker run -d \
+          --name grafana \
+          -p 3000:3000 \
+          grafana/grafana
+
+    # ----------------------------
+    # VERIFY
+    # ----------------------------
+
+    - name: Show running containers
+      command: docker ps
+      register: docker_output
+
+    - name: Display Docker containers
+      debug:
+        var: docker_output.stdout_lines

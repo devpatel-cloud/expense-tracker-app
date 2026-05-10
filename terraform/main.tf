@@ -24,22 +24,11 @@ resource "azurerm_public_ip" "publicip" {
   allocation_method   = "Static"
   sku                 = "Standard"
 }
+
 resource "azurerm_network_security_group" "nsg" {
   name                = "expense-nsg"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-
-  security_rule {
-    name                       = "SSH"
-    priority                   = 330
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "22"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
 
   security_rule {
     name                       = "FastAPI"
@@ -76,6 +65,30 @@ resource "azurerm_network_security_group" "nsg" {
     source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
+
+  security_rule {
+    name                       = "SSH"
+    priority                   = 330
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "NodeExporter"
+    priority                   = 340
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "9100"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
 }
 
 resource "azurerm_network_interface" "nic" {
@@ -100,7 +113,9 @@ resource "azurerm_linux_virtual_machine" "vm" {
   name                = "expense-tracker-vm"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
-  size                = "Standard_B1s"
+
+  # Upgraded VM Size
+  size = "Standard_B2s"
 
   admin_username = "azureuser"
   admin_password = "Devops@12345"
