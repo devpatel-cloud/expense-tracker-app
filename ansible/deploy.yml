@@ -1,0 +1,15 @@
+---
+- hosts: azurevm
+  become: yes
+
+  tasks:
+
+    - name: Clone GitHub Repository
+      git:
+        repo: "https://github.com/devpatel-cloud/expense-tracker-app.git"
+        dest: /home/azureuser/expense-tracker-api
+
+    - name: Run Docker Compose
+      command: docker-compose up -d
+      args:
+        chdir: /home/azureuser/expense-tracker-api
