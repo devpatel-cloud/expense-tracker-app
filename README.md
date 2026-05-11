@@ -2,230 +2,233 @@
 
 ## Project Overview
 
-This project is a complete end-to-end DevOps implementation of an Expense Tracker web application using FastAPI, Docker, Terraform, Azure, Ansible, Prometheus, and Grafana.
+A complete end-to-end DevOps implementation of an Expense Tracker application using FastAPI, Docker, Terraform, Azure, Ansible, Prometheus, and Grafana.
 
-The project demonstrates:
+## Tech Stack
 
-- Full Stack Application Development
-- Containerization using Docker
-- CI/CD using GitHub Actions
-- Infrastructure as Code (IaC) using Terraform
-- Cloud Deployment on Azure VM
-- Configuration Management using Ansible
-- Monitoring using Prometheus & Grafana
-- Automated Deployment Workflow
-
----
-
-# Tech Stack Used
-
-## Backend
 - FastAPI
 - Python
 - SQLite
-- SQLAlchemy
-- JWT Authentication
-- Uvicorn
-
-## Frontend
-- HTML
-- CSS
-- JavaScript
-
-## DevOps Tools
 - Docker
 - Docker Compose
-- Git & GitHub
+- GitHub
 - GitHub Actions
 - Terraform
 - Azure VM
-- Azure CLI
 - Ansible
-- WSL Ubuntu
 - Prometheus
 - Grafana
 - Node Exporter
 
 ---
 
-# Project Architecture
+# Screenshots Documentation
 
-```text
-User
-   ↓
-Azure VM
-   ↓
-Docker Containers
-├── FastAPI Application
-├── Prometheus
-└── Grafana
-   ↓
-Node Exporter
-```
 
----
+# Backend
 
-# Features
+## FastAPI Running
 
-## Backend Features
-- User Registration
-- User Login
-- JWT Authentication
-- Protected Routes
-- Create Expense API
-- Get Expenses API
-- Health Check Endpoint
-- Swagger API Documentation
-
-## Frontend Features
-- User Registration UI
-- Login UI
-- Dashboard UI
-- Expense Management
-- Dynamic Expense Loading
-- Responsive Design
-
-## DevOps Features
-- Dockerized Application
-- Automated CI/CD Pipeline
-- Infrastructure Provisioning with Terraform
-- Automated Deployment with Ansible
-- Monitoring with Prometheus & Grafana
-
----
-
-# Screenshots
-
-## Backend
-
-### FastAPI Running
 ![FastAPI Running](screenshots/backend/fastapi-running.png)
 
-### Swagger Docs
+## Home Endpoint
+
+![Home Endpoint](screenshots/backend/home-endpoint.png)
+
+## Project Structure
+
+![Project Structure](screenshots/backend/project-structure.png)
+
+## Swagger Docs
+
 ![Swagger Docs](screenshots/backend/swagger-docs.png)
 
----
 
-## Frontend
+# Authentication
 
-### Homepage UI
-![Homepage](screenshots/frontend/homepage-ui.png)
+## Register Success
 
-### Login Page
-![Login](screenshots/frontend/login-page-ui.png)
+![Register Success](screenshots/auth/register-success.png)
 
-### Dashboard
-![Dashboard](screenshots/frontend/dashboard-expenses.png)
+## Login Success Token
 
----
+![Login Success Token](screenshots/auth/login-success-token.png)
 
-## Docker
 
-### Docker Containers
-![Docker](screenshots/docker/docker-build-and-container-running.png)
+# Database
 
----
+## SQLite Database Created
 
-## Terraform
+![SQLite Database Created](screenshots/Database/sqlite-database-created.png)
 
-### Terraform Apply
-![Terraform Apply](screenshots/terraform/terraform-apply-success.png)
 
-### Azure VM
-![Azure VM](screenshots/terraform/azure-vm-created.png)
+# Expenses
 
----
+## Create Expense Success
 
-## Ansible
+![Create Expense Success](screenshots/expenses/create-expense-success.png)
 
-### Ansible Playbook Success
-![Ansible](screenshots/ansible/ansible-playbook-success.png)
+## Get Expenses Data
 
----
+![Get Expenses Data](screenshots/expenses/get-expenses-data.png)
 
-## Monitoring
 
-### Node Exporter Metrics
-![Node Exporter](screenshots/monitoring/node-exporter-metrics.png)
+# Frontend
 
-### Prometheus Targets
-![Prometheus](screenshots/monitoring/prometheus-targets-up.png)
+## Homepage UI
 
-### Grafana Dashboard
-![Grafana](screenshots/monitoring/grafana-dashboard.png)
+![Homepage UI](screenshots/frontend/homepage-ui.png)
 
----
+## Register Page UI
 
-# CI/CD Workflow
+![Register Page UI](screenshots/frontend/register-page-ui.png)
 
-```text
-GitHub Push
-    ↓
-GitHub Actions
-    ↓
-Docker Build
-    ↓
-Azure VM Deployment
-    ↓
-Ansible Automation
-    ↓
-Docker Compose Deployment
-```
+## Login Page UI
 
----
+![Login Page UI](screenshots/frontend/login-page-ui.png)
 
-# Monitoring Stack
+## Dashboard Expenses
 
-## Prometheus
-- Metrics Collection
-- Target Monitoring
-- Scraping Node Exporter Metrics
+![Dashboard Expenses](screenshots/frontend/dashboard-expenses.png)
 
-## Grafana
-- Monitoring Dashboards
-- CPU Monitoring
-- Memory Monitoring
-- Basic Alerting Workflow
+## Mobile Responsive UI
 
-## Node Exporter
-- CPU Metrics
-- RAM Metrics
-- Disk Metrics
-- Network Metrics
+![Mobile Responsive UI](screenshots/frontend/mobile-responsive-ui.png)
 
----
 
-# Commands Used
+# Docker
 
-## Terraform
+## Docker Build and Container Running
 
-```bash
-terraform init
-terraform plan
-terraform apply
-```
+![Docker Build and Container Running](screenshots/Docker/docker-build-and-container-running.png)
 
-## Docker
+## Docker Desktop Container
 
-```bash
-docker build -t expense-tracker-app .
-docker-compose up --build -d
-```
+![Docker Desktop Container](screenshots/Docker/docker-desktop-container.png)
 
-## Ansible
+## Docker Swagger UI
 
-```bash
-ansible-playbook -i inventory.ini deploy.yml
-ansible-playbook -i inventory.ini monitoring.yml
-```
+![Docker Swagger UI](screenshots/Docker/docker-swagger-ui.png)
 
----
 
-# Future Improvements
+# GitHub & CI/CD
 
-- PostgreSQL Integration
-- HTTPS with Nginx
-- Kubernetes Deployment
+## GitHub Push Success
+
+![GitHub Push Success](screenshots/github/github-push-success.png)
+
+## GitHub Actions Success
+
+![GitHub Actions Success](screenshots/cicd/github-actions-success.png)
+
+## Workflow Job Details
+
+![Workflow Job Details](screenshots/cicd/workflow-job-details.png)
+
+
+# Terraform & Azure
+
+## Terraform Provider Code
+
+![Terraform Provider Code](screenshots/terraform/provider-tf-code.png)
+
+## Terraform Init Success
+
+![Terraform Init Success](screenshots/terraform/terraform-init-success.png)
+
+## Terraform Plan Output
+
+![Terraform Plan Output](screenshots/terraform/terraform-plan-output.png)
+
+## Terraform Apply Success
+
+![Terraform Apply Success](screenshots/terraform/terraform-apply-success-output.png)
+
+## Terraform Apply Success Output 1
+
+![Terraform Apply Success Output 1](screenshots/terraform/terraform-apply-success-output-1.png)
+
+## Azure VM Created
+
+![Azure VM Created](screenshots/terraform/azure-vm-created.png)
+
+## SSH Connected to Azure VM
+
+![SSH Connected to Azure VM](screenshots/terraform/ssh-connected-to-azure-vm.png)
+
+
+# Ansible
+
+## Ubuntu WSL Opened
+
+![Ubuntu WSL Opened](screenshots/ansible/ubuntu-wsl-opened.png)
+
+## Ansible Installed WSL
+
+![Ansible Installed WSL](screenshots/ansible/ansible-installed-wsl.png)
+
+## Ansible Ping Success
+
+![Ansible Ping Success](screenshots/ansible/ansible-ping-success.png)
+
+## Ansible Playbook Success
+
+![Ansible Playbook Success](screenshots/ansible/ansible-playbook-success.png)
+
+## Docker Containers Running VM
+
+![Docker Containers Running VM](screenshots/ansible/docker-containers-running-vm.png)
+
+## Monitoring Deployment
+
+![Monitoring Deployment](screenshots/ansible/Screenshot 2026-05-10 163335.png)
+
+
+# Monitoring
+
+## Monitoring Playbook Success
+
+![Monitoring Playbook Success](screenshots/monitoring-playbook-success.png)
+
+## Node Exporter Metrics
+
+![Node Exporter Metrics](screenshots/node-exporter-metrics.png)
+
+## Prometheus Targets Up
+
+![Prometheus Targets Up](screenshots/prometheus-targets-up.png)
+
+## Grafana Login
+
+![Grafana Login](screenshots/grafana-login.png)
+
+## Grafana Dashboard
+
+![Grafana Dashboard](screenshots/grafana-dashboard.png)
+
+## Monitoring Containers Running
+
+![Monitoring Containers Running](screenshots/monitoring-containers-running.png)
+
+
+# Application Running on Azure VM
+
+## Home Page on VM
+
+![Home Page on VM](screenshots/home-page-on-vm.png)
+
+## Register Page on VM
+
+![Register Page on VM](screenshots/Register-page-on-vm.png)
+
+## Login Page on VM
+
+![Login Page on VM](screenshots/login-page-on-vm.png)
+
+## Dashboard Page on VM
+
+![Dashboard Page on VM](screenshots/deshboard-page-on-vm.png)
+
 
 ---
 
